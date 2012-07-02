@@ -91,6 +91,11 @@ final class LoadAndDisplayImageTask implements Runnable {
 		return imageViewWasReused;
 	}
 
+	/**
+	 * 从网络下载图片
+	 * 
+	 * @return 无法下载到则返回null
+	 */
 	private Bitmap loadBitmap() {
 		File imageFile = configuration.discCache.get(imageLoadingInfo.uri);
 
@@ -100,7 +105,7 @@ final class LoadAndDisplayImageTask implements Runnable {
 			if (imageFile.exists()) {
 				if (configuration.loggingEnabled) Log.i(ImageLoader.TAG, String.format(LOG_LOAD_IMAGE_FROM_DISC_CACHE, imageLoadingInfo.memoryCacheKey));
 
-				Bitmap b = decodeImage(imageFile.toURI());
+				Bitmap b = decodeImage(imageFile.toURI()); // TODO: 可以计算一下，防止OOM
 				if (b != null) {
 					return b;
 				}
@@ -189,6 +194,9 @@ final class LoadAndDisplayImageTask implements Runnable {
 			ImageSize targetImageSize = new ImageSize(width, height);
 			ImageDecoder decoder = new ImageDecoder(new URI(imageLoadingInfo.uri), configuration.downloader, targetImageSize, ImageScaleType.EXACT);
 			Bitmap bmp = decoder.decode();
+			if (bmp == null) {
+				return;
+			}
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile));
 			boolean compressedSuccessfully = bmp.compress(configuration.imageCompressFormatForDiscCache, configuration.imageQualityForDiscCache, os);
 			if (compressedSuccessfully) {

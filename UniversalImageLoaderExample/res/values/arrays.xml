@@ -2,6 +2,10 @@
 <resources>
 
     <string-array name="heavy_images">
+        <item>null</item> <!-- wrong link -->
+        <item>null?329342432</item> <!-- wrong link -->
+        <item>http://null.jpg</item> <!-- wrong link -->
+        <item>http://www.google.com/null.jpg</item> <!-- wrong link -->
         <item>https://lh6.googleusercontent.com/-jZgveEqb6pg/T3R4kXScycI/AAAAAAAAAE0/xQ7CvpfXDzc/s1024/sample_image_01.jpg</item>
         <item>https://lh4.googleusercontent.com/-K2FMuOozxU0/T3R4lRAiBTI/AAAAAAAAAE8/a3Eh9JvnnzI/s1024/sample_image_02.jpg</item>
         <item>https://lh5.googleusercontent.com/-SCS5C646rxM/T3R4l7QB6xI/AAAAAAAAAFE/xLcuVv3CUyA/s1024/sample_image_03.jpg</item>

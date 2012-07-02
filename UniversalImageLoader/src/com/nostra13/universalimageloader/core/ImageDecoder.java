@@ -51,19 +51,31 @@ class ImageDecoder {
 	 */
 	public Bitmap decode() throws IOException {
 		Options decodeOptions = getBitmapOptionsForImageDecoding();
-		InputStream imageStream = imageDownloader.getStream(imageUri);
-		try {
-			return BitmapFactory.decodeStream(imageStream, null, decodeOptions);
-		} finally {
-			imageStream.close();
+		if (decodeOptions == null) {
+			return null; // cann't get inputStream
 		}
+		InputStream imageStream = imageDownloader.getStream(imageUri);
+		if (imageStream != null) {
+			try {
+				return BitmapFactory.decodeStream(imageStream, null, decodeOptions);
+			} finally {
+				imageStream.close();
+			}
+		}
+		return null;
 	}
 
 	private Options getBitmapOptionsForImageDecoding() throws IOException {
-		Options options = new Options();
-		options.inSampleSize = computeImageScale();
-		return options;
+		int scale = computeImageScale();
+		if (scale != FAIL_TO_GET_INPUTSTRAM) {
+			Options options = new Options();
+			options.inSampleSize = scale;
+			return options;
+		}
+		return null;
 	}
+	
+	private static final int FAIL_TO_GET_INPUTSTRAM = -999;
 
 	private int computeImageScale() throws IOException {
 		int width = targetSize.getWidth();
@@ -73,6 +85,9 @@ class ImageDecoder {
 		Options options = new Options();
 		options.inJustDecodeBounds = true;
 		InputStream imageStream = imageDownloader.getStream(imageUri);
+		if (imageStream == null) {
+			return FAIL_TO_GET_INPUTSTRAM;
+		}
 		try {
 			BitmapFactory.decodeStream(imageStream, null, options);
 		} finally {
