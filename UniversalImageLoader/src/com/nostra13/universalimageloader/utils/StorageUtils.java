@@ -75,8 +75,10 @@ public final class StorageUtils {
 		File appCacheDir = null;
 		if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
+			System.out.println("appCacheDir: " + appCacheDir);
+			if (appCacheDir != null) appCacheDir.mkdirs();
 		}
-		if (!appCacheDir.mkdirs()) {
+		if (appCacheDir == null || ! appCacheDir.exists() ) { 
 			appCacheDir = context.getCacheDir();
 		}
 		return appCacheDir;
